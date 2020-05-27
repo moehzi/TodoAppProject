@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.tugas.todoapp.database.Todo
 import com.tugas.todoapp.databinding.ListItemBinding
 
 
@@ -32,7 +33,7 @@ class TodoAdapter(private val viewModel: TodoViewModel) :
         holder.titleText.text = getItem(position).title
         //Menghapus
         holder.btnDel.setOnClickListener {
-            viewModel.removeTodo(holder.adapterPosition)
+            viewModel.removeTodo(getItem(holder.adapterPosition))
         }
 
         //Edit
@@ -55,7 +56,9 @@ class TodoAdapter(private val viewModel: TodoViewModel) :
                 updateBtn.setOnClickListener {
                     val editedTitle = editTitle.text.toString()
                     val editedTask = editTask.text.toString()
-                    viewModel.updateTodo(holder.adapterPosition,editedTitle,editedTask)
+                    getItem(holder.adapterPosition).title = editedTitle
+                    getItem(holder.adapterPosition).task = editedTask
+                    viewModel.updateTodo(getItem(holder.adapterPosition))
                     holder.titleText.text = editedTitle
                     holder.todoText.text = editedTask
                     alertDialog.dismiss()

@@ -1,32 +1,58 @@
 package com.tugas.todoapp
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.tugas.todoapp.database.Todo
+import com.tugas.todoapp.database.TodoDAO
+import com.tugas.todoapp.database.TodoDatabase
+import com.tugas.todoapp.database.TodoRepo
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
-class TodoViewModel :ViewModel(){
-    private val _todos = MutableLiveData<ArrayList<Todo>>()
-    val todos : LiveData<ArrayList<Todo>>
-    get() = _todos
+class TodoViewModel(application: Application) :AndroidViewModel(application) {
+    //add repo
+    private val repository: TodoRepo
+    private val todoDao: TodoDAO
+    private var _todos: LiveData<List<Todo>>
+    val todos: LiveData<List<Todo>>
+        get() = _todos
+
+    //coroutine
+    private var vmJob = Job()
+    private val uiScope = CoroutineScope(Dispatchers.IO + vmJob)
 
     init {
-        _todos.value = arrayListOf(
-            Todo(1,"Mandi","Nanti mandi jam 10"),
-            Todo(2,"Berak","Nanti berak sama dedek")
-        )
+        todoDao = TodoDatabase.getInstance(application).todoDao()
+        repository = TodoRepo(todoDao)
+        _todos = repository.allTodos
     }
-    fun createDoes(text: String,text1:String){
-        var newId = _todos.value!!.size +1
-        _todos.value!!.add(Todo(newId,text,text1))
-        _todos.setValue ( _todos.value)
+
+    fun createDoes(text: String,text1:String) {
+        uiScope.launch {
+            repository.insertTodo(Todo(0,text,text1))
+        }
     }
-    fun removeTodo(pos: Int){
-        _todos.value!!.removeAt(pos)
-        _todos.setValue ( _todos.value)
+
+
+        fun removeTodo(todo: Todo) {
+            uiScope.launch {
+                repository.deleteTodo(todo)
+            }
+        }
+
+        fun updateTodo(todo:Todo) {
+            uiScope.launch {
+                repository.updateTodo(todo)
+            }
+        }
+        override fun onCleared() {
+            super.onCleared()
+            vmJob.cancel()
+        }
+
     }
-    fun updateTodo(pos: Int,text:String,text1: String){
-        _todos.value!![pos].title = text
-        _todos.value!![pos].task = text1
-        _todos.setValue ( _todos.value)
-    }
-}
