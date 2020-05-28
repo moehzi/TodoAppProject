@@ -1,5 +1,6 @@
 package com.tugas.todoapp
 
+import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,6 +12,9 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.tugas.todoapp.databinding.ActivityMainBinding
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
@@ -18,9 +22,11 @@ class MainActivity : AppCompatActivity() {
     private lateinit var viewManager: RecyclerView.LayoutManager
     private lateinit var viewModel: TodoViewModel
 
+    @SuppressLint("SimpleDateFormat")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         val binding: ActivityMainBinding = DataBindingUtil.setContentView(this,R.layout.activity_main)
         viewModel = ViewModelProviders.of(this).get(TodoViewModel::class.java)
 
@@ -31,7 +37,6 @@ class MainActivity : AppCompatActivity() {
         recyclerView.apply {
             layoutManager = viewManager
             adapter = viewAdapter
-
         }
         val btnNew = binding.btnNew
         // Add data
@@ -42,12 +47,17 @@ class MainActivity : AppCompatActivity() {
             val newTask =  view.findViewById<TextView>(R.id.editTask)
             val addBtn = view.findViewById<TextView>(R.id.update_btn)
             val cancelBtn = view.findViewById<TextView>(R.id.cancel1_btn)
+            val dateCreate = view.findViewById<TextView>(R.id.date_new)
+            val calendar = Calendar.getInstance()
+            val simpleFormat = SimpleDateFormat("hh:mm:ss a")
+            val time = simpleFormat.format(calendar.time)
+            val currentDate = DateFormat.getDateInstance(DateFormat.DEFAULT).format(calendar.time)
+            dateCreate.setText("Created : $currentDate $time")
 
             //Dialog
             var alertDialog = AlertDialog.Builder(this).setView(view).show()
             addBtn.setOnClickListener {
-
-                viewModel.createDoes(newTitle.text.toString(),newTask.text.toString())
+                viewModel.createDoes(newTitle.text.toString(),newTask.text.toString(),dateCreate.text.toString())
                 alertDialog.dismiss()
 
             }

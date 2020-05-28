@@ -3,8 +3,6 @@ package com.tugas.todoapp
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.tugas.todoapp.database.Todo
 import com.tugas.todoapp.database.TodoDAO
 import com.tugas.todoapp.database.TodoDatabase
@@ -32,9 +30,9 @@ class TodoViewModel(application: Application) :AndroidViewModel(application) {
         _todos = repository.allTodos
     }
 
-    fun createDoes(text: String,text1:String) {
+    fun createDoes(text: String,text1:String,text2:String) {
         uiScope.launch {
-            repository.insertTodo(Todo(0,text,text1))
+            repository.insertTodo(Todo(0,text,text1,text2))
         }
     }
 

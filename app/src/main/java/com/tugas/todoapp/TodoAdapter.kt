@@ -31,6 +31,7 @@ class TodoAdapter(private val viewModel: TodoViewModel) :
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.todoText.text = getItem(position).task
         holder.titleText.text = getItem(position).title
+        holder.dateCrt.text = getItem(position).date
         //Menghapus
         holder.btnDel.setOnClickListener {
             viewModel.removeTodo(getItem(holder.adapterPosition))
@@ -76,6 +77,7 @@ class TodoAdapter(private val viewModel: TodoViewModel) :
         val todoText = binding.taskText
         val btnDel = binding.btnDel
         val btnEdit = binding.btnEdit
+        val dateCrt = binding.createDate
     }
 
     class TodoDiffCallBack:DiffUtil.ItemCallback<Todo>(){

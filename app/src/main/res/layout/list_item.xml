@@ -14,9 +14,21 @@
             android:layout_height="wrap_content"
             android:background="@drawable/gradient"
             android:orientation="vertical"
-            android:padding="5dp">
+            android:padding="10dp">
 
             <TextView
+                android:id="@+id/create_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="32dp"
+                android:text="Created date"
+                android:textSize="10sp"
+                android:textStyle="bold|italic" />
+
+            <TextView
+                android:layout_marginTop="5dp"
+                android:layout_below="@id/create_date"
                 android:id="@+id/title_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -53,6 +65,7 @@
                 android:layout_marginTop="5dp"
                 android:text="@string/notes"
                 android:textSize="12sp" />
+
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
 </layout>
