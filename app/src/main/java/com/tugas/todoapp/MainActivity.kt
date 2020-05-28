@@ -1,6 +1,8 @@
 package com.tugas.todoapp
 
 import android.annotation.SuppressLint
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -22,6 +24,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var viewManager: RecyclerView.LayoutManager
     private lateinit var viewModel: TodoViewModel
 
+
+
     @SuppressLint("SimpleDateFormat")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,25 +43,70 @@ class MainActivity : AppCompatActivity() {
             adapter = viewAdapter
         }
         val btnNew = binding.btnNew
+
+        //Deadline
+
+
         // Add data
         btnNew.setOnClickListener{
             val inflater = LayoutInflater.from(this)
             val view = inflater.inflate(R.layout.new_layout,null)
             val newTitle =  view.findViewById<TextView>(R.id.editTitle)
             val newTask =  view.findViewById<TextView>(R.id.editTask)
-            val addBtn = view.findViewById<TextView>(R.id.update_btn)
+            val addBtn = view.findViewById<TextView>(R.id.add_btn)
             val cancelBtn = view.findViewById<TextView>(R.id.cancel1_btn)
             val dateCreate = view.findViewById<TextView>(R.id.date_new)
+            val deadDateText = view.findViewById<TextView>(R.id.dead_date_text)
+            val deadTimeText = view.findViewById<TextView>(R.id.dead_time_text)
+            val deadTime = view.findViewById<TextView>(R.id.deadline_time)
+            val deadDate = view.findViewById<TextView>(R.id.deadline)
             val calendar = Calendar.getInstance()
             val simpleFormat = SimpleDateFormat("hh:mm:ss a")
+            val formatdate = SimpleDateFormat("MMM dd,yyyy ")
             val time = simpleFormat.format(calendar.time)
             val currentDate = DateFormat.getDateInstance(DateFormat.DEFAULT).format(calendar.time)
-            dateCreate.setText("Created : $currentDate $time")
+            dateCreate.setText("Created at $currentDate $time")
+
+            val day = calendar.get(Calendar.DAY_OF_MONTH)
+            val month = calendar.get(Calendar.MONTH)
+            val year   = calendar.get(Calendar.YEAR)
+            val hour = calendar.get(Calendar.HOUR_OF_DAY)
+            val minute = calendar.get(Calendar.MINUTE)
+
+
+
+                deadDate.setOnClickListener {
+                    val datepd = DatePickerDialog(this,DatePickerDialog.OnDateSetListener { view, mYear, mMonth, dayOfMonth ->
+                        calendar.set(Calendar.DAY_OF_MONTH,dayOfMonth)
+                        calendar.set(Calendar.MONTH,mMonth)
+                        calendar.set(Calendar.YEAR,mYear)
+                        var dateDead = formatdate.format(calendar.time)
+                        deadDateText.setText("Deadline at $dateDead ")
+                    },year,month,day).show()
+
+                }
+
+
+            deadTime.setOnClickListener {
+                val timePd = TimePickerDialog(this,TimePickerDialog.OnTimeSetListener { view, hourOfDay, mMinute ->
+                    calendar.set(Calendar.HOUR_OF_DAY,hourOfDay)
+                    calendar.set(Calendar.MINUTE,mMinute)
+                    val timeDead = simpleFormat.format(calendar.time)
+                    deadTimeText.setText("$timeDead")
+                },hour,minute,false).show()
+            }
+
+
+
+
+
 
             //Dialog
             var alertDialog = AlertDialog.Builder(this).setView(view).show()
+            //Dialog pick deadline
+
             addBtn.setOnClickListener {
-                viewModel.createDoes(newTitle.text.toString(),newTask.text.toString(),dateCreate.text.toString())
+                viewModel.createDoes(newTitle.text.toString(),newTask.text.toString(),dateCreate.text.toString(),deadDateText.text.toString(),deadTimeText.text.toString())
                 alertDialog.dismiss()
 
             }
@@ -70,6 +119,17 @@ class MainActivity : AppCompatActivity() {
         viewModel.todos.observe(this, Observer { list->
             viewAdapter.submitList(list.toMutableList())
         })
+
+
+        }
+
     }
 
-}
+
+
+
+
+
+
+
+

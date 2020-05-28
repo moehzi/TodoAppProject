@@ -30,9 +30,9 @@ class TodoViewModel(application: Application) :AndroidViewModel(application) {
         _todos = repository.allTodos
     }
 
-    fun createDoes(text: String,text1:String,text2:String) {
+    fun createDoes(text: String,text1:String,text2:String,text3:String,text4:String) {
         uiScope.launch {
-            repository.insertTodo(Todo(0,text,text1,text2))
+            repository.insertTodo(Todo(0,text,text1,text2,text3,text4))
         }
     }
 
