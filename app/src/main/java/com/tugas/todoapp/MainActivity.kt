@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
@@ -15,7 +17,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.tugas.todoapp.database.Todo
 import com.tugas.todoapp.databinding.ActivityMainBinding
 import java.text.DateFormat
 import java.text.SimpleDateFormat
@@ -194,7 +195,57 @@ class MainActivity : AppCompatActivity() {
 
 
 
+
+
+
     }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu,menu)
+        if (menu != null) {
+            search(menu)
+        }
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return super.onOptionsItemSelected(item)
+    }
+    private fun search(menu:Menu){
+        val item = menu?.findItem(R.id.search)
+
+        val searchView = item?.actionView as androidx.appcompat.widget.SearchView?
+        searchView?.isSubmitButtonEnabled = true
+
+        searchView?.setOnQueryTextListener(
+            object: androidx.appcompat.widget.SearchView.OnQueryTextListener{
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    if(query != null){
+                        getItems(query)
+                    }
+                    return true
+                }
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    if(newText != null){
+                        getItems(newText)
+                    }
+                    return true
+                }
+            }
+        )
+
+    }
+
+    private fun getItems(searchText: String){
+        var searchText = searchText
+        searchText = "%$searchText%"
+
+        viewModel.search(searchText)?.observe(this, Observer {
+            viewAdapter.submitList(it)
+        })
+    }
+
 }
 
 

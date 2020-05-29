@@ -27,4 +27,7 @@ interface TodoDAO {
 
     @Query("SELECT * FROM todo ORDER BY deadlineDate ASC, deadlineTime ASC")
     fun sortDueDateAscend() : LiveData<List<Todo>>
+
+    @Query("SELECT * FROM todo WHERE title LIKE :title")
+    fun search(title: String) : LiveData<List<Todo>>
 }

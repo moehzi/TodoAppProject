@@ -39,7 +39,6 @@ class TodoViewModel(application: Application) :AndroidViewModel(application) {
         text4: String
     ) {
         uiScope.launch {
-            Log.d("Debug","Fungsi create model")
             repository.insertTodo(Todo(0, text, text1, text2, text3, text4))
         }
     }
@@ -51,7 +50,6 @@ class TodoViewModel(application: Application) :AndroidViewModel(application) {
     fun removeTodo(todo: Todo) {
         uiScope.launch {
             repository.deleteTodo(todo)
-            Log.d("Debug","Fungsi remove model")
         }
     }
 
@@ -64,7 +62,6 @@ class TodoViewModel(application: Application) :AndroidViewModel(application) {
     fun sortDescCreatedDate() : LiveData<List<Todo>> {
         uiScope.launch {
             repository.sortDateCreatedDesc()
-            Log.d("Debug", "fungsi sort date created viewmodel")
         }
         return todos
     }
@@ -72,7 +69,6 @@ class TodoViewModel(application: Application) :AndroidViewModel(application) {
 
     fun sortAscCreatedDate(): LiveData<List<Todo>> {
         uiScope.launch {
-            Log.d("Debug", "fungsi sort date created repo")
             repository.sortDateCreatedAsdAsc()
         }
         return todos
@@ -93,7 +89,9 @@ class TodoViewModel(application: Application) :AndroidViewModel(application) {
 
         return _todos
     }
-
+    fun search(title: String):LiveData<List<Todo>>?{
+        return repository.search(title)
+    }
     override fun onCleared() {
         super.onCleared()
         vmJob.cancel()
