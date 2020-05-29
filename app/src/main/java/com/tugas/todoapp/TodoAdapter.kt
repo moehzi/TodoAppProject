@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Button
@@ -21,6 +23,8 @@ import java.util.*
 
 class TodoAdapter(private val viewModel: TodoViewModel) :
     ListAdapter<Todo, TodoAdapter.MyViewHolder>(TodoDiffCallBack()) {
+    private var list = listOf<Todo>()
+
 
 
     override fun onCreateViewHolder(
@@ -33,6 +37,10 @@ class TodoAdapter(private val viewModel: TodoViewModel) :
 
         return MyViewHolder(binding)
     }
+    fun setTodos(lists: List<Todo>) {
+        this.list = lists
+        notifyDataSetChanged()
+    }
 
     @SuppressLint("InflateParams")
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
@@ -44,6 +52,7 @@ class TodoAdapter(private val viewModel: TodoViewModel) :
         //Menghapus
         holder.btnDel.setOnClickListener {
             viewModel.removeTodo(getItem(holder.adapterPosition))
+            Log.d("Debug","Fungsi remove adapter")
         }
         //Edit
         holder.btnEdit.setOnClickListener {
@@ -134,15 +143,17 @@ class TodoAdapter(private val viewModel: TodoViewModel) :
         }
     }
 
-   // override fun getItemCount() = viewModel.todos.value!!.size
-    class MyViewHolder(private val binding:ListItemBinding ) : RecyclerView.ViewHolder(binding.root) {
-        val titleText = binding.titleText
-        val todoText = binding.taskText
-        val btnDel = binding.btnDel
-        val btnEdit = binding.btnEdit
-        val dateCrt = binding.createDate
-       val deadDate = binding.deadDateTextRecy
-       val deadTime = binding.deadlineTextTimeRecy1
+  // override fun getItemCount() = viewModel.todos.value!!.size
+    class MyViewHolder(val binding:ListItemBinding ) : RecyclerView.ViewHolder(binding.root) {
+
+          val titleText = binding.titleText
+          val todoText = binding.taskText
+          val btnDel = binding.btnDel
+          val btnEdit = binding.btnEdit
+          val dateCrt = binding.createDate
+          val deadDate = binding.deadDateTextRecy
+          val deadTime = binding.deadlineTextTimeRecy1
+      }
     }
 
     class TodoDiffCallBack:DiffUtil.ItemCallback<Todo>(){
@@ -154,5 +165,6 @@ class TodoAdapter(private val viewModel: TodoViewModel) :
             return oldItem.equals(newItem)
         }
 
+
     }
-}
+

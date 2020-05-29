@@ -1,6 +1,7 @@
 package com.tugas.todoapp
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import com.tugas.todoapp.database.Todo
@@ -30,27 +31,73 @@ class TodoViewModel(application: Application) :AndroidViewModel(application) {
         _todos = repository.allTodos
     }
 
-    fun createDoes(text: String,text1:String,text2:String,text3:String,text4:String) {
+    fun createDoes(
+        text: String,
+        text1: String,
+        text2: String,
+        text3: String,
+        text4: String
+    ) {
         uiScope.launch {
-            repository.insertTodo(Todo(0,text,text1,text2,text3,text4))
+            Log.d("Debug","Fungsi create model")
+            repository.insertTodo(Todo(0, text, text1, text2, text3, text4))
         }
     }
 
+    fun getData():LiveData<List<Todo>>{
+        return  todos
+    }
 
-        fun removeTodo(todo: Todo) {
-            uiScope.launch {
-                repository.deleteTodo(todo)
-            }
+    fun removeTodo(todo: Todo) {
+        uiScope.launch {
+            repository.deleteTodo(todo)
+            Log.d("Debug","Fungsi remove model")
         }
+    }
 
-        fun updateTodo(todo:Todo) {
-            uiScope.launch {
-                repository.updateTodo(todo)
-            }
+    fun updateTodo(todo: Todo) {
+        uiScope.launch {
+            repository.updateTodo(todo)
         }
-        override fun onCleared() {
-            super.onCleared()
-            vmJob.cancel()
+    }
+
+    fun sortDescCreatedDate() : LiveData<List<Todo>> {
+        uiScope.launch {
+            repository.sortDateCreatedDesc()
+            Log.d("Debug", "fungsi sort date created viewmodel")
         }
+        return todos
+    }
+
+
+    fun sortAscCreatedDate(): LiveData<List<Todo>> {
+        uiScope.launch {
+            Log.d("Debug", "fungsi sort date created repo")
+            repository.sortDateCreatedAsdAsc()
+        }
+        return todos
+    }
+
+    fun sortDueDateDesc(): LiveData<List<Todo>> {
+        uiScope.launch {
+            repository.sortDueDateDesc()
+        }
+        return todos
 
     }
+
+    fun sortDueDateAscend(): LiveData<List<Todo>> {
+        uiScope.launch {
+            repository.sortDueDateAscend()
+        }
+
+        return _todos
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        vmJob.cancel()
+    }
+}
+
+
