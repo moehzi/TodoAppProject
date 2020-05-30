@@ -37,10 +37,6 @@ class TodoAdapter(private val viewModel: TodoViewModel) :
 
         return MyViewHolder(binding)
     }
-    fun setTodos(lists: List<Todo>) {
-        this.list = lists
-        notifyDataSetChanged()
-    }
 
     @SuppressLint("InflateParams")
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
@@ -52,7 +48,6 @@ class TodoAdapter(private val viewModel: TodoViewModel) :
         //Menghapus
         holder.btnDel.setOnClickListener {
             viewModel.removeTodo(getItem(holder.adapterPosition))
-            Log.d("Debug","Fungsi remove adapter")
         }
         //Edit
         holder.btnEdit.setOnClickListener {

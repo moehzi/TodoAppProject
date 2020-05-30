@@ -59,35 +59,20 @@ class TodoViewModel(application: Application) :AndroidViewModel(application) {
         }
     }
 
-    fun sortDescCreatedDate() : LiveData<List<Todo>> {
-        uiScope.launch {
-            repository.sortDateCreatedDesc()
-        }
-        return todos
+    fun deadlineDesc():LiveData<List<Todo>>? {
+        return repository.deadlineDesc()
     }
 
-
-    fun sortAscCreatedDate(): LiveData<List<Todo>> {
-        uiScope.launch {
-            repository.sortDateCreatedAsdAsc()
-        }
-        return todos
+    fun deadlineAsc():LiveData<List<Todo>>? {
+        return repository.deadlineAsc()
     }
 
-    fun sortDueDateDesc(): LiveData<List<Todo>> {
-        uiScope.launch {
-            repository.sortDueDateDesc()
-        }
-        return todos
-
+    fun dateDesc():LiveData<List<Todo>>? {
+        return repository.dateDesc()
     }
 
-    fun sortDueDateAscend(): LiveData<List<Todo>> {
-        uiScope.launch {
-            repository.sortDueDateAscend()
-        }
-
-        return _todos
+    fun dateAsc():LiveData<List<Todo>>? {
+        return repository.dateAsc()
     }
     fun search(title: String):LiveData<List<Todo>>?{
         return repository.search(title)

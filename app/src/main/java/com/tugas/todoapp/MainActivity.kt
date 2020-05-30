@@ -141,52 +141,47 @@ class MainActivity : AppCompatActivity() {
             alertDialog.create()
         }
         btnSort.setOnClickListener {
-            val items = arrayOf("Sort by Created Date", "Sort by Due Date")
-            var alertDialog = AlertDialog.Builder(this)
+
+            val items = arrayOf("Sort By Date Created", "Sort By Deadline")
             val builder =
                 AlertDialog.Builder(this)
+            val alert = AlertDialog.Builder(this)
             builder.setItems(items) { dialog, which ->
                 // the user clicked on colors[which]
                 when (which) {
                     0 -> {
-                        alertDialog.setTitle(items[which])
+                        alert.setTitle(items[which])
                             .setPositiveButton("Newest to Oldest") { dialog, which ->
-
-                                viewModel.sortDescCreatedDate().observe(this, Observer {
+                                viewModel.dateDesc()?.observe(this, Observer {
                                     viewAdapter.submitList(it)
                                 })
                             }
                             .setNegativeButton("Oldest to Newest") { dialog, which ->
-                                viewModel.sortAscCreatedDate().observe(this, Observer {list->
-                                    viewAdapter.submitList(list.toMutableList())
+                                viewModel.dateAsc()?.observe(this, Observer {
+                                    viewAdapter.submitList(it)
                                 })
-
                             }
-                        alertDialog.show()
+                        alert.show()
+
                     }
-
                     1 -> {
-                        alertDialog.setTitle(items[which])
+                        alert.setTitle(items[which])
                             .setPositiveButton("Newest to Oldest") { dialog, which ->
-                                viewModel.sortDueDateDesc().observe(this, Observer {
-                                    it?.let(viewAdapter::submitList)
+                                viewModel.deadlineDesc()?.observe(this, Observer {
+                                    viewAdapter.submitList(it)
                                 })
-
-
                             }
                             .setNegativeButton("Oldest to Newest") { dialog, which ->
-                                viewModel.sortDueDateAscend().observe(this, Observer {
-                                    it?.let(viewAdapter::submitList)
+                                viewModel.deadlineAsc()?.observe(this, Observer {
+                                    viewAdapter.submitList(it)
                                 })
-
                             }
-                        alertDialog.show()
+                        alert.show()
+
                     }
                 }
             }
             builder.show()
-
-
         }
 
             viewModel.getData().observe(this, Observer { list ->

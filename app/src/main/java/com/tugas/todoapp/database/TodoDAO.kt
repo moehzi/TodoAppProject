@@ -17,16 +17,17 @@ interface TodoDAO {
     @Delete
     suspend fun delete(todo: Todo)
 
-    @Query("SELECT*FROM todo ORDER BY date DESC")
-    fun sortCreatedDateDesc(): LiveData<List<Todo>>
-
-    @Query("SELECT*FROM todo ORDER BY date ASC")
-    fun sortCreatedDateAsc() : LiveData<List<Todo>>
     @Query("SELECT * FROM todo ORDER BY deadlineDate DESC, deadlineTime DESC")
-    fun sortDueDateDesc() : LiveData<List<Todo>>
+    fun deadlineDesc() : LiveData<List<Todo>>
 
     @Query("SELECT * FROM todo ORDER BY deadlineDate ASC, deadlineTime ASC")
-    fun sortDueDateAscend() : LiveData<List<Todo>>
+    fun deadlineAsc() : LiveData<List<Todo>>
+
+    @Query("SELECT * FROM todo ORDER BY date DESC")
+    fun dateDesc() : LiveData<List<Todo>>
+
+    @Query("SELECT * FROM todo ORDER BY date ASC")
+    fun dateAsc() : LiveData<List<Todo>>
 
     @Query("SELECT * FROM todo WHERE title LIKE :title")
     fun search(title: String) : LiveData<List<Todo>>

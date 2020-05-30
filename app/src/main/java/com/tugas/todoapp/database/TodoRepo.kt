@@ -1,6 +1,5 @@
 package com.tugas.todoapp.database
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 
 class TodoRepo(private val TodoDao:TodoDAO) {
@@ -16,19 +15,20 @@ class TodoRepo(private val TodoDao:TodoDAO) {
         TodoDao.update(todo)
     }
 
-    fun sortDateCreatedDesc(){
-         TodoDao.sortCreatedDateDesc()
-    }
-   fun sortDateCreatedAsdAsc(){
-       TodoDao.sortCreatedDateAsc()
-
-    }
-    fun sortDueDateDesc() {
-        TodoDao.sortDueDateDesc()
+    fun deadlineDesc() : LiveData<List<Todo>>?{
+        return TodoDao?.deadlineDesc()
     }
 
-    fun sortDueDateAscend() {
-        TodoDao.sortDueDateAscend()
+    fun deadlineAsc() : LiveData<List<Todo>>?{
+        return TodoDao?.deadlineAsc()
+    }
+
+    fun dateDesc() : LiveData<List<Todo>>?{
+        return TodoDao?.dateDesc()
+    }
+
+    fun dateAsc() : LiveData<List<Todo>>?{
+        return TodoDao?.dateAsc()
     }
     fun search(title: String) : LiveData<List<Todo>>?{
         return TodoDao?.search(title)
